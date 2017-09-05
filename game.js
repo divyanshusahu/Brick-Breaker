@@ -11,10 +11,14 @@ const balanceWidth = 40;
 const balanceHeight = 10;
 const balanceHeightDiff = 50;
 var balance = [];
-//var balanceCol = [];
+//const balanceInit = [];
 var collision = false;
 var diffX;
 var colIndex;
+var isWin = false;
+const LIVES = 3;
+var life = 0;
+var isLoss = false;
 
 window.onload = function(){
   canvas = document.getElementById('game');
@@ -26,18 +30,31 @@ window.onload = function(){
     paddleX = mousePos.x - (PADDLE_WIDTH/2);
   });
   canvas.addEventListener('mousedown',function(){
+    if (life<3)
+    {
     gameStart = 0;
     ballSpeedY = 5;
+  }
+    if(life==3){
+      //isLoss = false;
+      //life=0;
+      location.reload();
+    }
+    if (isWin){
+      isWin = false;
+      location.reload();
+    }
   });
   //console.log(balance);
-  storeCor();
+  //storeCor();
   setInterval(callEverything,1000/30);
   //drawBalance();
+  storeCor();
 }
 
 function callEverything(){
-  move();
   draw();
+  move();
 }
 
 function calMousePos(evt){
@@ -54,6 +71,14 @@ function calMousePos(evt){
 function draw(){
   context.fillStyle = 'black';
   context.fillRect(0,0,canvas.width,canvas.height);
+  if (isLoss){
+    showLossScreen();
+    return;
+  }
+  if(isWin){
+    showWinScreen();
+    return;
+  }
   context.fillStyle = 'white';
   context.fillRect(paddleX,canvas.height-15,PADDLE_WIDTH,10 );
   context.beginPath();
@@ -71,15 +96,23 @@ function drawBalance(){
   }
 }
 
+function showWinScreen(){
+  context.fillStyle = 'white';
+  context.fillText('YOU WIN',350,100);
+  context.fillText('click to continue',350,500);
+}
+
 function move(){
   //if(gameStart){
     //ballX = paddleX + PADDLE_WIDTH/2;
     //console.log(ballX);
   //}
+
   if(gameStart){
     newStart();
     return;
   }
+  win();
   //calBallSpeedX();
   ifCollision();
   if (collision){
@@ -107,11 +140,30 @@ function move(){
     }
     else {
       newStart();
+      life++;
+      if(life==LIVES){
+        //life=0;
+      isLoss = true;}
     }
   }
   if (ballY <  10)
   ballSpeedY = -ballSpeedY;
 
+}
+
+function showLossScreen(){
+  context.fillStyle = 'white';
+  context.fillText('You Loose!!! GAME OVER',350,100);
+  context.fillText('Click to continue',350,500);
+  //balance = balanceInit;
+  //storeCor();
+  //console.log('I am loss screen');
+}
+
+function win(){
+  if (balance.length == 0){
+    isWin = true;
+  }
 }
 
 function calBallSpeedX(){
@@ -145,9 +197,10 @@ function storeCor(){
   for (var i=20;i<=canvas.width-30;i+=80){
     for (var j=50;j<=200;j+=balanceHeightDiff){
       storeBalance(i,j,balance);
-      balanceCol = balance;
+      //storeBalance(i,j,balanceInit);
     }
   }
+  //console.log(balanceInit);
 }
 
 function storeBalance(xV,yV,array){
@@ -164,6 +217,8 @@ function ifCollision(){
         diffX = corX - (item.x+balanceWidth/2);
         colIndex = findIndexCol(item.x,item.y,balance);
         balance.splice(colIndex,1);
+        //console.log(balance);
+        //console.log(balanceInit);
         //colIndex1 = findIndexCol(item.x,item.y,balanceCol);
         //console.log(colIndex);
       }
