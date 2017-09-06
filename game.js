@@ -30,7 +30,7 @@ window.onload = function(){
     paddleX = mousePos.x - (PADDLE_WIDTH/2);
   });
   canvas.addEventListener('mousedown',function(){
-    if (life<3)
+    if (life<3 && gameStart)
     {
     gameStart = 0;
     ballSpeedY = 5;
