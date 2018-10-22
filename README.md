@@ -4,4 +4,4 @@
 
 ##### Use mouse to move the paddle horizontally. Player is provided with three lives to break all the bricks and win.
 
-![alt text](https://github.com/Praveen1027/Brick-Breaker/Screenshot (9).png)
+![alt text](Screenshot (9).png)
