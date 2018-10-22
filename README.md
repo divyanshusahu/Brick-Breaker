@@ -4,4 +4,4 @@
 
 ##### Use mouse to move the paddle horizontally. Player is provided with three lives to break all the bricks and win.
 
-![alt text](Screenshot (9).png)
+<img src="Screenshot (9).png">
